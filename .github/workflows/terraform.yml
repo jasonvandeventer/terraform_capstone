@@ -2,8 +2,8 @@ name: Terraform CI
 
 on:
   push:
-    paths:
-    - '**.tf'
+    branches:
+      - main
   pull_request:
 
 jobs:
@@ -29,4 +29,3 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
-        

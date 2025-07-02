@@ -1,10 +1,11 @@
+---
 name: Terraform CI
 
 on:
   push:
     branches:
       - main
-  pull_request:
+  pull_request: {}
 
 jobs:
   terraform:
@@ -12,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up Terraform
@@ -20,12 +21,11 @@ jobs:
         with:
           terraform_version: 1.6.0
 
-      - name: Terraform Init
+      - name: Terraform Init (without backend)
         run: terraform init -backend=false
 
-      - name: Terraform Format
+      - name: Terraform Format Check
         run: terraform fmt -check -recursive
 
       - name: Terraform Validate
         run: terraform validate
-

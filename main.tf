@@ -67,5 +67,22 @@ resource "aws_instance" "web" {
   vpc_security_group_ids      = [aws_security_group.web_sg.id]
   associate_public_ip_address = true
 
+  user_data = <<-EOF
+              #!/bin/bash
+              yum update -y
+              amazon-linux-extras install docker -y
+              service docker start
+              usermod -a -G docker ec2-user
+
+              docker run -d -p 80:80 \
+                --name capstone-app \
+                jasonvandeventer/capstone-nginx:latest || \
+              docker run -d -p 80:80 \
+                -v /var/www/html:/usr/share/nginx/html \
+                nginx:alpine
+              
+              echo "Docker container started."
+              EOF
+
   tags = { Name = "capstone-web" }
 }

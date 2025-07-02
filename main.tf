@@ -66,6 +66,7 @@ resource "aws_instance" "web" {
   subnet_id                   = aws_subnet.public.id
   vpc_security_group_ids      = [aws_security_group.web_sg.id]
   associate_public_ip_address = true
+  key_name                    = "HomelabEC2SSH"
 
   user_data = <<-EOF
               #!/bin/bash

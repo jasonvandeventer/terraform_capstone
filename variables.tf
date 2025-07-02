@@ -33,3 +33,9 @@ variable "ami_id" {
   type        = string
   default     = "ami-0c803b171269e2d72"
 }
+
+variable "key_name" {
+  description = "Name of the EC2 key pair"
+  type        = string
+  default     = "HomelabEC2SSH"
+}

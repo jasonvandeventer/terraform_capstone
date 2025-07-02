@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
-    bucket = "devops-capstone-tfstate"
+    bucket = "jv-devops-capstone-tfstate"
     key    = "terraform/state.tfstate"
-    region = "us-east-1"
+    region = "us-east-2"
   }
 }

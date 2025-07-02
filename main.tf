@@ -15,7 +15,7 @@ resource "aws_vpc" "main" {
   cidr_block           = var.vpc_cidr
   enable_dns_support   = true
   enable_dns_hostnames = true
-  tags = { Name = "capstone-vpc" }
+  tags                 = { Name = "capstone-vpc" }
 }
 
 resource "aws_subnet" "public" {
@@ -23,12 +23,12 @@ resource "aws_subnet" "public" {
   cidr_block              = var.public_subnet_cidr
   availability_zone       = var.availability_zone
   map_public_ip_on_launch = true
-  tags = { Name = "capstone-public-subnet" }
+  tags                    = { Name = "capstone-public-subnet" }
 }
 
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
-  tags = { Name = "capstone-igw" }
+  tags   = { Name = "capstone-igw" }
 }
 
 resource "aws_security_group" "web_sg" {

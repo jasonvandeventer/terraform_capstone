@@ -128,6 +128,15 @@ graph TB
 
 Multi-stage Dockerfile for a static Nginx site, scanned with Trivy for security vulnerabilities. Container image hosted on Docker Hub with automated builds and security scanning integrated into the CI/CD pipeline.
 
+## AWS S3 Integration Plan
+
+- **Use Case:** Store user-uploaded images and backups.
+- **Buckets:** Single bucket in us-east-2 named: `myproject-prod-assets`.
+- **Access Control:** Private bucket with IAM roles permitting EC2 instance access.
+- **Versioning:** Enabled for data recovery.
+- **Lifecycle Management:** Transition backups to Glacier after 30 days.
+- **Replication:** Not required at this stage (revisit as project scales).
+
 ## Key Features
 
 - ✅ **Infrastructure as Code**: Complete infrastructure defined in Terraform

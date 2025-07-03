@@ -147,6 +147,14 @@ Multi-stage Dockerfile for a static Nginx site, scanned with Trivy for security 
 - Instances with IAM roles securely interact with S3, removing the need for credential management.
 - Verified best practice adherence for AWS security.
 
+## Coming Next: ALB + ACM Integration
+
+- [ ] Add Application Load Balancer to serve the Nginx app.
+- [ ] Configure Target Group with EC2 instances.
+- [ ] Provision SSL certificate via ACM.
+- [ ] Redirect HTTP to HTTPS on ALB listener.
+- [ ] Update Security Groups accordingly.
+- [ ] Output ALB DNS name for public access.
 
 ## Key Features
 

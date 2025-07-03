@@ -137,6 +137,17 @@ Multi-stage Dockerfile for a static Nginx site, scanned with Trivy for security 
 - **Lifecycle Management:** Transition backups to Glacier after 30 days.
 - **Replication:** Not required at this stage (revisit as project scales).
 
+## IAM Role Configuration (EC2 + S3 Integration)
+
+- Created an IAM role (`EC2S3AccessRole`) with attached policy (`AmazonS3ReadOnlyAccess`) to grant secure S3 access.
+- Launched EC2 instances with this IAM role to securely access S3 without explicitly storing credentials.
+- Tested and verified successful access via AWS CLI (`aws s3 ls`, `aws s3 cp`) directly from EC2 instances.
+
+**Observations:**
+- Instances with IAM roles securely interact with S3, removing the need for credential management.
+- Verified best practice adherence for AWS security.
+
+
 ## Key Features
 
 - ✅ **Infrastructure as Code**: Complete infrastructure defined in Terraform
@@ -173,7 +184,7 @@ Infrastructure will be provisioned in AWS us-east-2 region with all components a
 ## Live Demo
 
 👉 [http://3.15.25.142](http://3.15.25.142)
-
+(Note: IP address subject to change.)
 
 ## Author
 

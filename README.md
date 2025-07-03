@@ -23,8 +23,8 @@ graph TB
     end
     
     subgraph "AWS Cloud (us-east-2)"
-        subgraph "S3"
-            S3[S3 Bucket<br/>jv-devops-capstone-tfstate<br/>Terraform State]
+        subgraph "State Storage"
+            S3_BUCKET[S3 Bucket<br/>jv-devops-capstone-tfstate<br/>Terraform State]
         end
         
         subgraph "VPC: capstone-vpc (10.0.0.0/16)"
@@ -57,7 +57,7 @@ graph TB
     EC2 --> NGINX
     
     %% CI/CD Flow
-    GHA -.->|terraform apply| S3
+    GHA -.->|terraform apply| S3_BUCKET
     GHA -.->|deploy & monitor| EC2
     
     %% Container Flow
@@ -73,7 +73,7 @@ graph TB
     classDef external fill:#607D8B,stroke:#455A64,stroke-width:2px,color:#fff
     classDef cicd fill:#24292e,stroke:#1B1F23,stroke-width:2px,color:#fff
     
-    class S3,IGW aws
+    class S3_BUCKET,IGW aws
     class RT,SG security
     class EC2 compute
     class NGINX container

@@ -31,6 +31,25 @@ resource "aws_internet_gateway" "igw" {
   tags   = { Name = "capstone-igw" }
 }
 
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+
+  tags = {
+    Name = "capstone-public-rt"
+  }
+}
+
+resource "aws_route_table_association" "public" {
+  subnet_id      = aws_subnet.public.id
+  route_table_id = aws_route_table.public.id
+}
+
+
 resource "aws_security_group" "web_sg" {
   name        = "web-sg"
   description = "Allow HTTP and SSH"
@@ -70,19 +89,20 @@ resource "aws_instance" "web" {
 
   user_data = <<-EOF
               #!/bin/bash
-              yum update -y
-              amazon-linux-extras install docker -y
-              service docker start
-              usermod -a -G docker ec2-user
+              set -ex
 
-              docker run -d -p 80:80 \
-                --name capstone-app \
-                jasonvandeventer/capstone-nginx:latest || \
-              docker run -d -p 80:80 \
-                -v /var/www/html:/usr/share/nginx/html \
-                nginx:alpine
-              
-              echo "Docker container started."
+              # Update and install Docker
+              dnf update -y
+              dnf install docker -y
+
+              # Start and enable Docker
+              systemctl start docker
+              systemctl enable docker
+              usermod -aG docker ec2-user
+
+              # Run your container (fallback to Nginx if custom fails)
+              docker run -d -p 80:80 --name capstone-app coruscantsunrise/capstone-nginx:latest 
+
               EOF
 
   tags = { Name = "capstone-web" }

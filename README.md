@@ -80,6 +80,7 @@ graph TB
     class USERS,DOCKER_HUB external
     class GHA cicd
 
+
 ## Screenshots
 
 ### Live Site

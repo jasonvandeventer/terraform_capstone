@@ -22,7 +22,7 @@ This project demonstrates my ability to provision secure, scalable AWS infrastru
 
 ## Tech Stack
 
-- **Infrastructure**: AWS (VPC, EC2, S3, Security Groups)
+- **Infrastructure**: AWS (VPC, EC2, S3, Security Groups, ALB)
 - **IaC**: Terraform
 - **CI/CD**: GitHub Actions
 - **App**: Static site on Nginx (Dockerized)
@@ -56,6 +56,13 @@ graph TB
                 end
             end
         end
+
+        subgraph "Public Subnet: 10.0.2.0/24 (us-east-2b)"
+                ALB[Application Load Balancer<br/>capstone-alb<br/>DNS Routed to EC2]
+            end
+
+            ALB -->|Forward to port 80| EC2
+            USERS -->|HTTP:80| ALB
     end
 
     subgraph "External"
@@ -86,6 +93,7 @@ graph TB
     classDef container fill:#0db7ed,stroke:#0099cc,stroke-width:2px,color:#fff
     classDef external fill:#607D8B,stroke:#455A64,stroke-width:2px,color:#fff
     classDef cicd fill:#24292e,stroke:#1B1F23,stroke-width:2px,color:#fff
+    classDef loadbalancer fill:#673AB7,stroke:#4527A0,stroke-width:2px,color:#fff
 
     class S3_BUCKET,IGW aws
     class RT,SG security
@@ -93,12 +101,14 @@ graph TB
     class NGINX container
     class USERS,DOCKER_HUB external
     class GHA cicd
+    class ALB loadbalancer
 ```
 
 ### CIDR Strategy
 
 - **VPC:** `10.0.0.0/16` – allows for up to 65,536 private IPs
-- **Public Subnet:** `10.0.1.0/24` – 256 addresses for internet-facing resources
+- **Public Subnet:** `10.0.1.0/24` – 256 addresses for EC2, Nginx
+- **Public Subnet 2:** `10.0.2.0/24` – second AZ for ALB high availability 
 - **Private Subnet (planned):** `10.0.2.0/24` – reserved for NAT/ALB targets or databases
 
 ## Screenshots
@@ -114,9 +124,15 @@ graph TB
 
 ### Infrastructure Components
 
+#### Load Balancer
+- **Application Load Balancer (ALB)**: Internet-facing ALB that distributes HTTP traffic to EC2 instances.
+- **Listener**: Accepts HTTP traffic on port 80 and forwards to the target group.
+- **Target Group**: Points to the EC2 instance on port 80 with health checks on `/`.
+- ***Availability Zones**: Deployed across `us-east-2a` and `us-east-2b` for HA.
+
 #### Core AWS Resources
 - **VPC**: Custom network (10.0.0.0/16) with DNS support enabled
-- **Public Subnet**: Single subnet (10.0.1.0/24) in availability zone us-east-2a
+- **Subnets**: Two public subnets in separate AZs
 - **Internet Gateway**: Provides internet access for public resources
 - **Route Table**: Routes all traffic (0.0.0.0/0) through the Internet Gateway
 - **Security Group**: Allows inbound SSH (port 22) and HTTP (port 80) from anywhere
@@ -206,14 +222,15 @@ Infrastructure will be provisioned in AWS us-east-2 region with all components a
 
 ## Terraform Outputs
 
+- **ALB DNS Name**: Public DNS endpoint for the application
 - **EC2 Public IP**: Direct access to the deployed application
 - **VPC ID**: Reference for additional resource deployment
 - **Subnet ID**: Network configuration details
 
 ## Live Demo
 
-👉 [http://3.15.25.142](http://3.15.25.142)
-> 🔁 **Note**: IP address may change on instance restart. Use output or ALB DNS name once available.
+👉 [capstone-alb-1475848756.us-east-2.elb.amazonaws.com](capstone-alb-1475848756.us-east-2.elb.amazonaws.com)
+> 🔁 **Note**: This is served through the Application Load Balancer, not directly via EC2.
 
 ## Author
 

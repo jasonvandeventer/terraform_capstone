@@ -17,3 +17,8 @@ output "security_group_id" {
   description = "The ID of the web security group"
   value       = aws_security_group.web_sg.id
 }
+
+output "alb_dns_name" {
+  description = "DNS name of the ALB"
+  value       = aws_lb.main.dns_name
+}

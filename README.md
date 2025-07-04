@@ -246,7 +246,7 @@ Infrastructure will be provisioned in AWS us-east-2 region with all components a
 
 ## Live Demo
 
-👉 [capstone-alb-31519764.us-east-2.elb.amazonaws.com](capstone-alb-31519764.us-east-2.elb.amazonaws.com)
+👉 [Capstone through ALB](capstone-alb-31519764.us-east-2.elb.amazonaws.com)
 > 🔁 **Note**: This is served through the Application Load Balancer, not directly via EC2.
 
 ## Author

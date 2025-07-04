@@ -11,6 +11,14 @@
 
 This project demonstrates my ability to provision secure, scalable AWS infrastructure using Terraform, automate deployments with GitHub Actions, and containerize applications with Docker.
 
+## 🚀 Quickstart
+
+Provision a working AWS environment in minutes:
+
+```bash
+terraform init && terraform apply
+```
+
 ## Project Goals
 
 - Provision reusable AWS infrastructure using modular Terraform
@@ -27,6 +35,14 @@ This project demonstrates my ability to provision secure, scalable AWS infrastru
 - **CI/CD**: GitHub Actions
 - **App**: Static site on Nginx (Dockerized)
 - **Language**: HCL (Terraform), Bash
+
+## Key Terraform Files
+
+- [`infra/vpc.tf`](infra/vpc.tf) – VPC, subnets, route tables
+- [`infra/alb.tf`](infra/alb.tf) – Application Load Balancer
+- [`infra/ec2.tf`](infra/ec2.tf) – EC2 instance and Docker bootstrap
+- [`infra/iam.tf`](infra/iam.tf) – IAM roles for EC2 to S3 access
+- [`infra/s3.tf`](infra/s3.tf) – S3 integration and future expansion
 
 ## Architecture
 
@@ -109,18 +125,18 @@ graph TB
 - **VPC:** `10.0.0.0/16` – allows for up to 65,536 private IPs
 - **Public Subnet:** `10.0.1.0/24` – 256 addresses for EC2, Nginx
 - **Public Subnet 2:** `10.0.2.0/24` – second AZ for ALB high availability 
-- **Private Subnet (planned):** `10.0.2.0/24` – reserved for NAT/ALB targets or databases
+- **Private Subnet (planned):** `10.0.3.0/24` – reserved for NAT/ALB targets or databases
 
 ## Screenshots
 
 ### Live Site
-![Live Screenshot](./docs/site.png)
+![Live Screenshot](docs/site.png)
 
 ### Terraform Plan
-![Terraform Screenshot](./docs/plan.png)
+![Terraform Screenshot](docs/plan.png)
 
 ### EC2 Running Container
-![EC2 Screenshot](./docs/ec2.png)
+![EC2 Screenshot](docs/ec2.png)
 
 ### Infrastructure Components
 
@@ -243,5 +259,14 @@ All screenshots and diagrams are original unless otherwise noted.
 
 This project is licensed under the MIT License. See [LICENSE](./LICENSE) for details.
 
-
 **Portfolio Progression**: This capstone project integrates and builds upon the individual DevOps skills demonstrated across my portfolio, culminating in a production-ready infrastructure deployment that showcases expertise in cloud architecture, automation, and security best practices.
+
+## 🧠 What I Learned
+
+- How to design and deploy fault-tolerant, multi-AZ AWS infrastructure using Terraform  
+- How to resolve real-world deployment issues (e.g., subnet CIDR conflicts, ALB AZ constraints, ENI lockups)  
+- Best practices for IAM roles and securely accessing S3 without exposing credentials  
+- How to automate infrastructure provisioning and Docker deployments using GitHub Actions  
+- How to structure and document a production-ready infrastructure-as-code project for hiring visibility  
+- The importance of planning CIDR strategies, availability zones, and security groups up front  
+- How to build a modular Terraform codebase that supports future expansion (ACM, ASG, RDS, Route 53)

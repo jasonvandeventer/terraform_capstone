@@ -186,8 +186,9 @@ Multi-stage Dockerfile for a static Nginx site, scanned with Trivy for security 
 
 ## Coming Next: ALB + ACM Integration
 
-- [ ] Add Application Load Balancer to serve the Nginx app.
-- [ ] Configure Target Group with EC2 instances.
+- [x] Add Application Load Balancer to serve the Nginx app.
+- [x] Configure Target Group with EC2 instances.
+- [x] Configure Listener on port 80.
 - [ ] Provision SSL certificate via ACM.
 - [ ] Redirect HTTP to HTTPS on ALB listener.
 - [ ] Update Security Groups accordingly.
@@ -229,7 +230,7 @@ Infrastructure will be provisioned in AWS us-east-2 region with all components a
 
 ## Live Demo
 
-👉 [capstone-alb-1475848756.us-east-2.elb.amazonaws.com](capstone-alb-1475848756.us-east-2.elb.amazonaws.com)
+👉 [capstone-alb-31519764.us-east-2.elb.amazonaws.com](capstone-alb-31519764.us-east-2.elb.amazonaws.com)
 > 🔁 **Note**: This is served through the Application Load Balancer, not directly via EC2.
 
 ## Author

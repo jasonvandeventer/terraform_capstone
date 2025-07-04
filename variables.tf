@@ -10,13 +10,13 @@ variable "vpc_cidr" {
   default     = "10.0.0.0/16"
 }
 
-variable "public_subnet_cidr" {
+variable "public_subnet_cidr_az1" {
   description = "CIDR block for public subnet"
   type        = string
   default     = "10.0.1.0/24"
 }
 
-variable "availability_zone" {
+variable "availability_zone_1" {
   description = "AZ for the subnet"
   type        = string
   default     = "us-east-2a"

@@ -7,13 +7,13 @@ resource "aws_vpc" "main" {
   }
 }
 
-resource "aws_subnet" "public" {
+resource "aws_subnet" "public_az1" {
   vpc_id                  = aws_vpc.main.id
-  cidr_block              = var.public_subnet_cidr
-  availability_zone       = var.availability_zone
+  cidr_block              = var.public_subnet_cidr_az1
+  availability_zone       = var.availability_zone_1
   map_public_ip_on_launch = true
   tags = {
-    Name = "capstone-public-subnet"
+    Name = "capstone-public-subnet-az1"
   }
 }
 
@@ -48,8 +48,8 @@ resource "aws_route_table" "public" {
   }
 }
 
-resource "aws_route_table_association" "public" {
-  subnet_id      = aws_subnet.public.id
+resource "aws_route_table_association" "public_az1" {
+  subnet_id      = aws_subnet.public_az1.id
   route_table_id = aws_route_table.public.id
 }
 

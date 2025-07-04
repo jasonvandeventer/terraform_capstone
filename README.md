@@ -95,8 +95,6 @@ graph TB
     class GHA cicd
 ```
 
-![Capstone Architecture](./assets/architecture.png)
-
 ### CIDR Strategy
 
 - **VPC:** `10.0.0.0/16` – allows for up to 65,536 private IPs

@@ -114,13 +114,13 @@ graph TB
 ## Screenshots
 
 ### Live Site
-![Live Screenshot](./assets/site.png)
+![Live Screenshot](./docs/site.png)
 
 ### Terraform Plan
-![Terraform Screenshot](./assets/plan.png)
+![Terraform Screenshot](./docs/plan.png)
 
 ### EC2 Running Container
-![EC2 Screenshot](./assets/ec2.png)
+![EC2 Screenshot](./docs/ec2.png)
 
 ### Infrastructure Components
 

@@ -79,6 +79,9 @@ graph TB
     class NGINX container
     class USERS,DOCKER_HUB external
     class GHA cicd
+    ```
+
+![Capstone Architecture](./assets/architecture.png)
 
 ## Screenshots
 
@@ -192,7 +195,7 @@ Infrastructure will be provisioned in AWS us-east-2 region with all components a
 ## Live Demo
 
 👉 [http://3.15.25.142](http://3.15.25.142)
-(Note: IP address subject to change.)
+> 🔁 **Note**: IP address may change on instance restart. Use output or ALB DNS name once available.
 
 ## Author
 

@@ -79,7 +79,6 @@ graph TB
     class NGINX container
     class USERS,DOCKER_HUB external
     class GHA cicd
-    ```
 
 ## Screenshots
 

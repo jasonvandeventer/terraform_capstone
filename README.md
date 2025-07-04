@@ -21,19 +21,19 @@ graph TB
     subgraph "GitHub"
         GHA[GitHub Actions<br/>CI/CD Pipeline]
     end
-    
+
     subgraph "AWS Cloud (us-east-2)"
         subgraph "State Storage"
-            S3_BUCKET[S3 Bucket<br/>jv-devops-capstone-tfstate<br/>Terraform State]
+            S3_BUCKET[S3 Bucket<br/>jv-devops-capstone-tfstate<br/>Terraform Remote State]
         end
-        
+
         subgraph "VPC: capstone-vpc (10.0.0.0/16)"
             IGW[Internet Gateway<br/>capstone-igw]
-            
+
             subgraph "Public Subnet: 10.0.1.0/24 (us-east-2a)"
                 RT[Route Table<br/>capstone-public-rt<br/>0.0.0.0/0 → IGW]
-                SG[Security Group: web-sg<br/>SSH: 22/tcp<br/>HTTP: 80/tcp<br/>Source: 0.0.0.0/0]
-                
+                SG[Security Group: web-sg<br/>Ingress: 22, 80/tcp<br/>Source: 0.0.0.0/0]
+
                 subgraph "EC2 Instance: capstone-web"
                     EC2[t2.micro<br/>Amazon Linux 2023<br/>Public IP assigned]
                     subgraph "Docker"
@@ -43,26 +43,26 @@ graph TB
             end
         end
     end
-    
+
     subgraph "External"
         USERS[Internet Users<br/>HTTP/SSH Access]
         DOCKER_HUB[Docker Hub<br/>coruscantsunrise/capstone-nginx:latest<br/>Trivy Scanned]
     end
-    
+
     %% Connections
     USERS -->|HTTP:80/SSH:22| IGW
     IGW --> RT
     RT --> SG
     SG --> EC2
     EC2 --> NGINX
-    
+
     %% CI/CD Flow
     GHA -.->|terraform apply| S3_BUCKET
     GHA -.->|deploy & monitor| EC2
-    
+
     %% Container Flow
     DOCKER_HUB -->|docker pull| NGINX
-    
+
     %% Styling
     classDef aws fill:#FF9900,stroke:#232F3E,stroke-width:2px,color:#fff
     classDef vpc fill:#4CAF50,stroke:#2E7D32,stroke-width:2px,color:#fff
@@ -72,14 +72,14 @@ graph TB
     classDef container fill:#0db7ed,stroke:#0099cc,stroke-width:2px,color:#fff
     classDef external fill:#607D8B,stroke:#455A64,stroke-width:2px,color:#fff
     classDef cicd fill:#24292e,stroke:#1B1F23,stroke-width:2px,color:#fff
-    
+
     class S3_BUCKET,IGW aws
     class RT,SG security
     class EC2 compute
     class NGINX container
     class USERS,DOCKER_HUB external
     class GHA cicd
-```
+
 ## Screenshots
 
 ### Live Site

@@ -1,10 +1,24 @@
 # AWS DevOps Capstone Project
 
+![Terraform](https://img.shields.io/badge/IaC-Terraform-844FBA?logo=terraform)
+![AWS](https://img.shields.io/badge/Cloud-AWS-FF9900?logo=amazonaws)
+![CI/CD](https://img.shields.io/badge/CI/CD-GitHub_Actions-2088FF?logo=githubactions)
+![License](https://img.shields.io/badge/License-MIT-blue.svg)
+
 **Terraform-powered infrastructure with automated CI/CD and containerized deployment**
 
 ## Overview
 
 This project demonstrates my ability to provision secure, scalable AWS infrastructure using Terraform, automate deployments with GitHub Actions, and containerize applications with Docker.
+
+## Project Goals
+
+- Provision reusable AWS infrastructure using modular Terraform
+- Automate provisioning and deployment via GitHub Actions
+- Deploy a secure, containerized static web app on EC2 with Nginx
+- Integrate remote S3 state backend to enable collaboration and version control
+- Prepare for horizontal scalability and SSL/TLS encryption with ALB + ACM
+
 
 ## Tech Stack
 
@@ -83,6 +97,12 @@ graph TB
 
 ![Capstone Architecture](./assets/architecture.png)
 
+### CIDR Strategy
+
+- **VPC:** `10.0.0.0/16` – allows for up to 65,536 private IPs
+- **Public Subnet:** `10.0.1.0/24` – 256 addresses for internet-facing resources
+- **Private Subnet (planned):** `10.0.2.0/24` – reserved for NAT/ALB targets or databases
+
 ## Screenshots
 
 ### Live Site
@@ -127,7 +147,7 @@ graph TB
 2. Docker image build & scan
 3. Deploy app to EC2
 
-## Dockerized App
+## Dockerized Application
 
 Multi-stage Dockerfile for a static Nginx site, scanned with Trivy for security vulnerabilities. Container image hosted on Docker Hub with automated builds and security scanning integrated into the CI/CD pipeline.
 
@@ -186,7 +206,7 @@ terraform apply
 
 Infrastructure will be provisioned in AWS us-east-2 region with all components automatically configured and connected.
 
-## Outputs
+## Terraform Outputs
 
 - **EC2 Public IP**: Direct access to the deployed application
 - **VPC ID**: Reference for additional resource deployment
@@ -202,6 +222,8 @@ Infrastructure will be provisioned in AWS us-east-2 region with all components a
 Jason VanDeventer – [vanfreckle.com](https://vanfreckle.com)
 
 ## License
+
+All screenshots and diagrams are original unless otherwise noted.
 
 This project is licensed under the MIT License. See [LICENSE](./LICENSE) for details.
 

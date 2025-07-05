@@ -1,10 +1,10 @@
 resource "aws_instance" "web" {
   ami                         = var.ami_id
   instance_type               = var.instance_type
-  subnet_id                   = aws_subnet.public_az1.id
+  subnet_id                   = aws_subnet.private_az1.id
   vpc_security_group_ids      = [aws_security_group.web_sg.id]
-  associate_public_ip_address = true
-  key_name                    = "HomelabEC2SSH"
+  associate_public_ip_address = false
+  key_name                    = var.key_name
 
   user_data = <<-EOF
               #!/bin/bash
@@ -21,7 +21,6 @@ resource "aws_instance" "web" {
 
               # Run your container (fallback to Nginx if custom fails)
               docker run -d -p 80:80 --name capstone-app coruscantsunrise/capstone-nginx:latest 
-
               EOF
 
   tags = {

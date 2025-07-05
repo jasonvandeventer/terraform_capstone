@@ -200,15 +200,12 @@ Multi-stage Dockerfile for a static Nginx site, scanned with Trivy for security 
 - Instances with IAM roles securely interact with S3, removing the need for credential management.
 - Verified best practice adherence for AWS security.
 
-## Coming Next: ALB + ACM Integration
+## 🔮 Future Enhancements
 
-- [x] Add Application Load Balancer to serve the Nginx app.
-- [x] Configure Target Group with EC2 instances.
-- [x] Configure Listener on port 80.
-- [ ] Provision SSL certificate via ACM.
-- [ ] Redirect HTTP to HTTPS on ALB listener.
-- [ ] Update Security Groups accordingly.
-- [ ] Output ALB DNS name for public access.
+- Add Route 53 and CloudFront for CDN + global DNS
+- Auto Scaling Group + Launch Templates
+- RDS integration with private access
+- Centralized logging via CloudWatch
 
 ## Key Features
 
@@ -218,6 +215,12 @@ Multi-stage Dockerfile for a static Nginx site, scanned with Trivy for security 
 - ✅ **Remote State Management**: Terraform state stored in S3 for collaboration
 - ✅ **Scalable Architecture**: Designed for easy horizontal scaling
 - ✅ **Security Best Practices**: Security groups and IAM roles properly configured
+
+### Deployment Milestones
+
+- ✅ HTTPS with ACM + Cloudflare (wildcard cert)
+- ✅ ALB with 301 redirect from HTTP to HTTPS
+- ✅ Dockerized EC2 in private subnet, secured behind ALB
 
 ## Usage
 

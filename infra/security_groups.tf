@@ -46,6 +46,14 @@ resource "aws_security_group" "web_sg" {
     description     = "Allow HTTP from ALB"
   }
 
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["75.7.10.135/32"]
+    description = "Allow SSH"
+  }
+
   egress {
     from_port   = 0
     to_port     = 0

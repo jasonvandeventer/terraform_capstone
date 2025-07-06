@@ -4,12 +4,23 @@
 ![AWS](https://img.shields.io/badge/Cloud-AWS-FF9900?logo=amazonaws)
 ![CI/CD](https://img.shields.io/badge/CI/CD-GitHub_Actions-2088FF?logo=githubactions)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
+[![GitHub repo](https://img.shields.io/badge/Repo-jasonvandeventer%2Fterraform_capstone-181717?logo=github)](https://github.com/jasonvandeventer/terraform_capstone)
+[![Live Site](https://img.shields.io/website?url=https%3A%2F%2Faws.vanfreckle.com)](https://aws.vanfreckle.com)
 
 **Terraform-powered infrastructure with automated CI/CD and containerized deployment**
 
 ## Overview
 
 This project demonstrates my ability to provision secure, scalable AWS infrastructure using Terraform, automate deployments with GitHub Actions, and containerize applications with Docker.
+
+## ✅ Live Demo
+
+🌐 **Production Deployment**: [`https://aws.vanfreckle.com`](https://aws.vanfreckle.com)
+
+![Working Screenshot](./screenshots/aws-vanfreckle-live.png)
+
+The deployed site serves a static HTML app from an Nginx container on EC2, behind an Application Load Balancer with TLS enabled.
+
 
 ## 🚀 Quickstart
 
@@ -21,12 +32,18 @@ terraform init && terraform apply
 
 ## Project Goals
 
-- Provision reusable AWS infrastructure using modular Terraform *(Domain 3: Design Resilient Architectures)*
-- Automate provisioning and deployment via GitHub Actions *(Domain 4: Cost-Optimized and Automated Solutions)*
-- Deploy a secure, containerized static web app on EC2 with Nginx *(Domain 2: Design Secure Architectures)*
-- Integrate remote S3 state backend to enable collaboration and version control *(Domain 3: Resilient & Auditable)*
-- Prepare for horizontal scalability and SSL/TLS encryption with ALB + ACM *(Domain 1: High Availability, Secure Networking)*
-- Add EC2 Auto Scaling Group across two AZs *(Domain 1 & 3)*
+- Provision reusable AWS infrastructure using modular Terraform 
+  *(Domain 3: Design Resilient Architectures)*
+- Automate provisioning and deployment via GitHub Actions
+  *(Domain 4: Cost-Optimized and Automated Solutions)*
+- Deploy a secure, containerized static web app on EC2 with Nginx
+  *(Domain 2: Design Secure Architectures)*
+- Integrate remote S3 state backend to enable collaboration and version control
+  *(Domain 3: Resilient & Auditable)*
+- Prepare for horizontal scalability and SSL/TLS encryption with ALB + ACM
+  *(Domain 1: High Availability, Secure Networking)*
+- Add EC2 Auto Scaling Group across two AZs
+  *(Domain 1 & 3)*
 
 
 ## Tech Stack
@@ -60,8 +77,25 @@ To demonstrate high availability and resilience, this project includes a fully T
 
 | ALB Working in Browser | ASG Instance Health | Target Group Status |
 |------------------------|---------------------|----------------------|
-| ![ALB](/docs/alb-dns.png) | ![ASG](/docs/asg-healthy.png) | ![Targets](/docs/capstone-tg.png) |
+| ![ALB](/screenshots/alb-dns.png) | ![ASG](/screenshots/asg-healthy.png) | ![Targets](/screenshots/capstone-tg.png) |
 
+## ✅ Application Response Validation
+
+From inside EC2:
+
+```bash
+$ curl localhost
+
+<html>
+  <head>
+    <title>Capstone Deployed</title>
+  </head>
+  <body>
+    <h1>Terraform + EC2 + Docker: Deployed!</h1>
+    <p>This static site is running in an Nginx container on AWS EC2.</p>
+  </body>
+</html>
+```
 
 ## Architecture
 
@@ -146,16 +180,11 @@ graph TB
 - **Public Subnet 2:** `10.0.2.0/24` – second AZ for ALB high availability 
 - **Private Subnet (planned):** `10.0.3.0/24` – reserved for NAT/ALB targets or databases
 
-## Screenshots
-
-### Live Site
-![Live Screenshot](docs/site.png)
-
 ### Terraform Plan
-![Terraform Screenshot](docs/plan.png)
+![Terraform Screenshot](screenshots/plan.png)
 
 ### EC2 Running Container
-![EC2 Screenshot](docs/ec2.png)
+![EC2 Screenshot](screenshots/ec2.png)
 
 ### Infrastructure Components
 
@@ -266,11 +295,6 @@ Infrastructure will be provisioned in AWS us-east-2 region with all components a
 - **EC2 Public IP**: Direct access to the deployed application
 - **VPC ID**: Reference for additional resource deployment
 - **Subnet ID**: Network configuration details
-
-## Live Demo
-
-👉 [Capstone Through ALB](http://capstone-alb-31519764.us-east-2.elb.amazonaws.com)
-> 🔁 **Note**: This is served through the Application Load Balancer, not directly via EC2.
 
 ## Author
 

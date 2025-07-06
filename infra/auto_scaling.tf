@@ -19,13 +19,22 @@ resource "aws_launch_template" "web" {
       Name = "capstone-app-instance"
     }
   }
-  user_data = base64encode(<<-EOF
-    #!/bin/bash
-    yum update -y
-    yum install -y nginx
-    systemctl enable nginx
-    systemctl start nginx
-  EOF
+
+  user_data = base64encode(<<EOF
+#!/bin/bash
+exec > /var/log/user_data_debug.log 2>&1
+set -x
+
+yum update -y
+yum install -y docker
+systemctl enable docker
+systemctl start docker
+
+sleep 15
+
+sudo docker pull coruscantsunrise/capstone-nginx:latest
+sudo docker run -d -p 80:80 coruscantsunrise/capstone-nginx:latest
+EOF
   )
 }
 

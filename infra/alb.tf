@@ -67,10 +67,3 @@ resource "aws_lb_listener" "https" {
     target_group_arn = aws_lb_target_group.web.arn
   }
 }
-
-# Attach EC2 to the Target Group
-resource "aws_lb_target_group_attachment" "web_ec2" {
-  target_group_arn = aws_lb_target_group.web.arn
-  target_id        = aws_instance.web.id
-  port             = 80
-}

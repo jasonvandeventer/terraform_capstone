@@ -21,11 +21,12 @@ terraform init && terraform apply
 
 ## Project Goals
 
-- Provision reusable AWS infrastructure using modular Terraform
-- Automate provisioning and deployment via GitHub Actions
-- Deploy a secure, containerized static web app on EC2 with Nginx
-- Integrate remote S3 state backend to enable collaboration and version control
-- Prepare for horizontal scalability and SSL/TLS encryption with ALB + ACM
+- Provision reusable AWS infrastructure using modular Terraform *(Domain 3: Design Resilient Architectures)*
+- Automate provisioning and deployment via GitHub Actions *(Domain 4: Cost-Optimized and Automated Solutions)*
+- Deploy a secure, containerized static web app on EC2 with Nginx *(Domain 2: Design Secure Architectures)*
+- Integrate remote S3 state backend to enable collaboration and version control *(Domain 3: Resilient & Auditable)*
+- Prepare for horizontal scalability and SSL/TLS encryption with ALB + ACM *(Domain 1: High Availability, Secure Networking)*
+- Add EC2 Auto Scaling Group across two AZs *(Domain 1 & 3)*
 
 
 ## Tech Stack
@@ -43,6 +44,24 @@ terraform init && terraform apply
 - [`infra/ec2.tf`](infra/ec2.tf) – EC2 instance and Docker bootstrap
 - [`infra/iam.tf`](infra/iam.tf) – IAM roles for EC2 to S3 access
 - [`infra/s3.tf`](infra/s3.tf) – S3 integration and future expansion
+
+## Auto Scaling Group (ASG) – Resilience & High Availability *(Domain 3)*
+
+To demonstrate high availability and resilience, this project includes a fully Terraform-managed EC2 Auto Scaling Group (ASG) integrated with an Application Load Balancer (ALB).
+
+### ✅ Features Implemented
+
+- Launch Template with Amazon Linux 2 and Nginx installed via `user_data`
+- ASG automatically launches EC2 instances across multiple Availability Zones
+- Health Checks via ALB target group ensure only healthy instances receive traffic
+- Scalability: `desired_capacity` set to 2 to demonstrate horizontal scale
+
+### 📸 Screenshots
+
+| ALB Working in Browser | ASG Instance Health | Target Group Status |
+|------------------------|---------------------|----------------------|
+| ![ALB](/docs/alb-dns.png) | ![ASG](/docs/asg-healthy.png) | ![Targets](/docs/capstone-tg.png) |
+
 
 ## Architecture
 
@@ -202,19 +221,20 @@ Multi-stage Dockerfile for a static Nginx site, scanned with Trivy for security 
 
 ## 🔮 Future Enhancements
 
-- Add Route 53 and CloudFront for CDN + global DNS
-- Auto Scaling Group + Launch Templates
-- RDS integration with private access
-- Centralized logging via CloudWatch
+- Add Route 53 and CloudFront for CDN + global DNS *(Domain 1 & 3)*
+- ✅ Auto Scaling Group + Launch Templates *(Complete)*
+- RDS integration with private access *(Domain 1 & 3)*
+- Centralized logging via CloudWatch *(Domain 2 & 4)*
 
 ## Key Features
 
-- ✅ **Infrastructure as Code**: Complete infrastructure defined in Terraform
-- ✅ **Automated CI/CD**: GitHub Actions pipeline for testing and deployment  
-- ✅ **Container Security**: Trivy scanning for vulnerability detection
-- ✅ **Remote State Management**: Terraform state stored in S3 for collaboration
-- ✅ **Scalable Architecture**: Designed for easy horizontal scaling
-- ✅ **Security Best Practices**: Security groups and IAM roles properly configured
+- ✅ **Infrastructure as Code**: Complete infrastructure defined in Terraform *(Domain 3)*
+- ✅ **Automated CI/CD**: GitHub Actions pipeline for testing and deployment *(Domain 4)*
+- ✅ **Container Security**: Trivy scanning for vulnerability detection *(Domain 2)*
+- ✅ **Remote State Management**: Terraform state stored in S3 for collaboration *(Domain 3)*
+- ✅ **Scalable Architecture**: Auto Scaling Group spans multiple AZs *(Domain 1 & 3)*
+- ✅ **Security Best Practices**: IAM roles, SGs, ALB health checks all enforced *(Domain 2)*
+
 
 ### Deployment Milestones
 

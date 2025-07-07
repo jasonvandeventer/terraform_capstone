@@ -2,7 +2,19 @@ resource "aws_launch_template" "web" {
   name_prefix   = "capstone-lt-"
   image_id      = var.ami_id
   instance_type = var.instance_type
-  key_name      = var.key_name
+  iam_instance_profile {
+    name = aws_iam_instance_profile.ec2_s3_profile.name
+  }
+  depends_on = [aws_iam_instance_profile.ec2_s3_profile]
+
+  key_name = var.key_name
+
+  metadata_options {
+    http_endpoint               = "enabled"
+    http_tokens                 = "required"
+    http_put_response_hop_limit = 1
+    instance_metadata_tags      = "enabled"
+  }
 
   network_interfaces {
     security_groups             = [aws_security_group.web_sg.id]
@@ -16,7 +28,8 @@ resource "aws_launch_template" "web" {
   tag_specifications {
     resource_type = "instance"
     tags = {
-      Name = "capstone-app-instance"
+      Name        = "capstone-app-instance"
+      DeployCycle = local.deploy_version
     }
   }
 
@@ -42,7 +55,7 @@ resource "aws_autoscaling_group" "web_asg" {
   name             = "capstone-asg"
   max_size         = 2
   min_size         = 1
-  desired_capacity = 2
+  desired_capacity = 1
   vpc_zone_identifier = [
     aws_subnet.public_az1.id,
     aws_subnet.public_az2.id

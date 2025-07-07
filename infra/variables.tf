@@ -76,3 +76,7 @@ variable "db_engine_version" {
 variable "db_instance_class" {
   default = "db.t3.micro"
 }
+
+locals {
+  deploy_version = timestamp()
+}

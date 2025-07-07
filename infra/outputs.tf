@@ -30,3 +30,11 @@ output "cert_validation_details" {
   description = "ACM certificate validation DNS details"
   value       = aws_acm_certificate.main.domain_validation_options
 }
+
+output "rds_endpoint" {
+  value = aws_db_instance.main.endpoint
+}
+
+output "dynamodb_table_name" {
+  value = aws_dynamodb_table.users.name
+}

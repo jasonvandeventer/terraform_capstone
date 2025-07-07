@@ -68,3 +68,11 @@ variable "vpc_cidr" {
   type        = string
   default     = "10.0.0.0/16"
 }
+
+variable "db_engine_version" {
+  default = "17.5"
+}
+
+variable "db_instance_class" {
+  default = "db.t3.micro"
+}

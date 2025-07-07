@@ -173,6 +173,20 @@ graph TB
     class ALB loadbalancer
 ```
 
+### 🛠️ Database Layer
+
+#### RDS (PostgreSQL)
+- Managed relational database (PostgreSQL 15.3)
+- Hosted in private subnets with security group protection
+- Connected to EC2 app tier for backend queries
+- Output: `${terraform output rds_endpoint}`
+
+#### DynamoDB
+- Serverless key-value store for flexible, scalable storage
+- PAY_PER_REQUEST billing — no capacity provisioning required
+- Primary key: `user_id` (string)
+- Output: `${terraform output dynamodb_table_name}`
+
 ### CIDR Strategy
 
 - **VPC:** `10.0.0.0/16` – allows for up to 65,536 private IPs
@@ -263,6 +277,8 @@ Multi-stage Dockerfile for a static Nginx site, scanned with Trivy for security 
 - ✅ **Remote State Management**: Terraform state stored in S3 for collaboration *(Domain 3)*
 - ✅ **Scalable Architecture**: Auto Scaling Group spans multiple AZs *(Domain 1 & 3)*
 - ✅ **Security Best Practices**: IAM roles, SGs, ALB health checks all enforced *(Domain 2)*
+- ✅ **Database Integration**: RDS and DynamoDB provisioned with Terraform 
+*(Domain 3)*
 
 
 ### Deployment Milestones

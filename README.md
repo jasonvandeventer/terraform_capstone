@@ -48,13 +48,24 @@ terraform init && terraform apply
 
 ## Key Terraform Files
 
-* [`infra/vpc.tf`](infra/vpc.tf) – VPC, subnets, route tables
 * [`infra/alb.tf`](infra/alb.tf) – Application Load Balancer
-* [`infra/ec2.tf`](infra/ec2.tf) – EC2 instance and Docker bootstrap
+* [`infra/auto_scaling.tf`](infra/auto_scaling.tf) – Launch Template + Auto Scaling Group for EC2
 * [`infra/iam.tf`](infra/iam.tf) – IAM roles for EC2 to S3 access
 * [`infra/s3.tf`](infra/s3.tf) – S3 integration and future expansion
+* [`infra/vpc.tf`](infra/vpc.tf) – VPC, subnets, route tables
 
-## Auto Scaling Group (ASG) – Resilience & High Availability *(Domain 3)*
+## Auto Scaling Group (ASG) + Launch Template – High Availability *(Domain 1 & 3)*
+
+To achieve horizontal scalability and fault tolerance, the application is deployed using an **Auto Scaling Group (ASG)** tied to a **Launch Template**.
+
+### 🧩 Core Features
+
+- **Launch Template** provisions Amazon Linux 2023 with Docker and Nginx via `user_data`
+- ASG spans **two public subnets in separate Availability Zones**
+- Integrates with the ALB via a **Target Group** and **ELB health checks**
+- **Self-healing**: unhealthy EC2 instances are automatically terminated and replaced
+- **Elasticity**: supports min/max/desired capacity configuration via Terraform
+- **Versioning**: Launch Template updates support rolling deploys
 
 * Launch Template with Amazon Linux 2 and Nginx installed via `user_data`
 * ASG automatically launches EC2 instances across multiple Availability Zones

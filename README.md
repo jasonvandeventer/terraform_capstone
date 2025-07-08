@@ -5,7 +5,7 @@
 ![CI/CD](https://img.shields.io/badge/CI/CD-GitHub_Actions-2088FF?logo=githubactions)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 [![GitHub repo](https://img.shields.io/badge/Repo-jasonvandeventer%2Fterraform_capstone-181717?logo=github)](https://github.com/jasonvandeventer/terraform_capstone)
-[![Live Site](https://img.shields.io/website?url=https%3A%2F%2Faws.vanfreckle.com)](https://aws.vanfreckle.com)
+[![Live Site](https://img.shields.io/website?url=https%3A%2F%2Fcapstone.vanfreckle.com)](https://capstone.vanfreckle.com)
 
 **Terraform-powered infrastructure with automated CI/CD and containerized deployment**
 

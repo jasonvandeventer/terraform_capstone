@@ -36,4 +36,4 @@ jobs:
         run: cd infra && terraform validate
 
       - name: Terraform Plan
-        run: cd infra && terraform plan -input=false
+        run: cd infra && terraform plan -input=false -var-file=terraform.tfvars

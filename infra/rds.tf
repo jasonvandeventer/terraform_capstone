@@ -16,19 +16,26 @@ resource "aws_db_subnet_group" "main" {
 }
 
 resource "aws_db_instance" "main" {
-  identifier             = "capstone-db"
-  allocated_storage      = 20
-  storage_type           = "gp2"
-  engine                 = "postgres"
-  engine_version         = "17.5"
-  instance_class         = "db.t3.micro"
-  username               = "capstone_admin"
-  password               = random_password.rds.result
-  skip_final_snapshot    = true
-  publicly_accessible    = false
-  vpc_security_group_ids = [aws_security_group.db_sg.id]
-  db_subnet_group_name   = aws_db_subnet_group.main.name
-  multi_az               = false
+  identifier              = "capstone-db"
+  allocated_storage       = 20
+  storage_type            = "gp3"
+  engine                  = "postgres"
+  engine_version          = "17.5"
+  instance_class          = "db.t3.micro"
+  username                = "capstone_admin"
+  password                = random_password.rds.result
+  skip_final_snapshot     = true
+  deletion_protection     = false
+  backup_retention_period = 7
+  multi_az                = true
+  publicly_accessible     = false
+  vpc_security_group_ids  = [aws_security_group.db_sg.id]
+  db_subnet_group_name    = aws_db_subnet_group.main.name
+
+  tags = {
+    Name        = "capstone-db"
+    Environment = "dev"
+  }
 }
 
 

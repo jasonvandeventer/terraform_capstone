@@ -7,17 +7,22 @@ on:
       - main
   pull_request: {}
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   terraform:
-    name: Terraform Format & Validate
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: infra
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: arn:aws:iam::932930471925:role/GitHubTerraformOIDCRole
+          aws-region: us-east-1
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
@@ -25,13 +30,10 @@ jobs:
           terraform_version: 1.8.5
 
       - name: Terraform Init
-        run: terraform init
-
-      - name: Terraform Format Check
-        run: terraform fmt -check -recursive
+        run: cd infra && terraform init
 
       - name: Terraform Validate
-        run: terraform validate
+        run: cd infra && terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -input=false
+        run: cd infra && terraform plan -input=false

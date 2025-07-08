@@ -14,6 +14,9 @@ permissions:
 jobs:
   terraform:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -30,10 +33,10 @@ jobs:
           terraform_version: 1.8.5
 
       - name: Terraform Init
-        run: cd infra && terraform init
+        run: terraform init
 
       - name: Terraform Validate
-        run: cd infra && terraform validate
+        run: terraform validate
 
       - name: Terraform Plan
-        run: cd infra && terraform plan -input=false -var-file=terraform.tfvars
+        run: terraform plan -input=false -var-file=terraform.tfvars

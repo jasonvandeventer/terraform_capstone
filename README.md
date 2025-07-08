@@ -93,12 +93,45 @@ $ curl localhost
 </html>
 ```
 
-## Architecture
+## 🗺️ Architecture
 
 ```mermaid
-%% Full architecture diagram is here (already reviewed previously)
-```
+graph TD
+  subgraph VPC [VPC]
+    igw[Internet Gateway]
+    alb[Application Load Balancer]
+    subnet1[Public Subnet AZ1]
+    subnet2[Public Subnet AZ2]
+    asg[Auto Scaling Group]
+    ec2a[EC2 Instance AZ1]
+    ec2b[EC2 Instance AZ2]
+    rds["RDS (PostgreSQL)"]
+    dynamodb["DynamoDB Table"]
+    alb -->|"HTTPS (443)"| ec2a
+    alb -->|"HTTPS (443)"| ec2b
+    ec2a -->|"Docker Nginx"| app1[Static App]
+    ec2b -->|"Docker Nginx"| app2[Static App]
+    ec2a --> rds
+    ec2b --> dynamodb
+    subnet1 --> alb
+    subnet2 --> alb
+    subnet1 --> ec2a
+    subnet2 --> ec2b
+  end
 
+  github[GitHub Actions CI/CD] -->|Terraform Deploy| alb
+  github -->|Terraform Deploy| rds
+  github -->|Terraform Deploy| asg
+
+  s3[S3 Backend] -->|Remote State| github
+  ddb[DynamoDB Lock Table] -->|State Locking| github
+
+  acm[ACM Certificate] --> alb
+  iam[IAM Role] --> ec2a
+  iam --> ec2b
+  ec2a --> s3
+  ec2b --> s3
+  ```
 ## 🛠️ Database Layer
 
 ### RDS (PostgreSQL)

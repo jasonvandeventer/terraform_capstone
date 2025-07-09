@@ -31,10 +31,27 @@ resource "aws_db_instance" "main" {
   publicly_accessible     = false
   vpc_security_group_ids  = [aws_security_group.db_sg.id]
   db_subnet_group_name    = aws_db_subnet_group.main.name
+  parameter_group_name    = aws_db_parameter_group.pg.name
+  apply_immediately       = true
 
   tags = {
     Name        = "capstone-db"
     Environment = "dev"
+  }
+}
+
+resource "aws_db_parameter_group" "pg" {
+  name        = "capstone-db-pg"
+  family      = "postgres17"
+  description = "Parameter group for PostgreSQL 17.5"
+
+  parameter {
+    name  = "log_min_duration_statement"
+    value = "1000"
+  }
+
+  tags = {
+    Name = "capstone-db-pg"
   }
 }
 

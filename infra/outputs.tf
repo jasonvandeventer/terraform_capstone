@@ -35,6 +35,11 @@ output "rds_endpoint" {
   value = aws_db_instance.main.endpoint
 }
 
+output "rds_db_name" {
+  description = "Database name for app configuration"
+  value       = aws_db_instance.main.db_name
+}
+
 output "dynamodb_table_name" {
   value = aws_dynamodb_table.users.name
 }

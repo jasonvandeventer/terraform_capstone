@@ -50,7 +50,9 @@ terraform init && terraform apply
 
 * [`infra/alb.tf`](infra/alb.tf) – Application Load Balancer
 * [`infra/auto_scaling.tf`](infra/auto_scaling.tf) – Launch Template + Auto Scaling Group for EC2
+* [`infra/dynamodb.tf`](infra/dynamodb.tf) – NoSQL table with TTL and GSI
 * [`infra/iam.tf`](infra/iam.tf) – IAM roles for EC2 to S3 access
+* [`infra/rds.tf`](infra/rds.tf) – RDS PostgreSQL config
 * [`infra/s3.tf`](infra/s3.tf) – S3 integration and future expansion
 * [`infra/vpc.tf`](infra/vpc.tf) – VPC, subnets, route tables
 
@@ -67,7 +69,7 @@ To achieve horizontal scalability and fault tolerance, the application is deploy
 - **Elasticity**: supports min/max/desired capacity configuration via Terraform
 - **Versioning**: Launch Template updates support rolling deploys
 
-* Launch Template with Amazon Linux 2 and Nginx installed via `user_data`
+* Launch Template with Amazon Linux 2023 and Nginx installed via `user_data`
 * ASG automatically launches EC2 instances across multiple Availability Zones
 * Health Checks via ALB target group ensure only healthy instances receive traffic
 * Scalability: `desired_capacity` set to 2 to demonstrate horizontal scale
@@ -97,53 +99,84 @@ $ curl localhost
 
 ```mermaid
 graph TD
-  subgraph VPC [VPC]
-    igw[Internet Gateway]
-    alb[Application Load Balancer]
-    subnet1[Public Subnet AZ1]
-    subnet2[Public Subnet AZ2]
-    asg[Auto Scaling Group]
-    ec2a[EC2 Instance AZ1]
-    ec2b[EC2 Instance AZ2]
-    rds["RDS (PostgreSQL)"]
-    dynamodb["DynamoDB Table"]
-    alb -->|"HTTPS (443)"| ec2a
-    alb -->|"HTTPS (443)"| ec2b
-    ec2a -->|"Docker Nginx"| app1[Static App]
-    ec2b -->|"Docker Nginx"| app2[Static App]
-    ec2a --> rds
-    ec2b --> dynamodb
-    subnet1 --> alb
-    subnet2 --> alb
-    subnet1 --> ec2a
-    subnet2 --> ec2b
-  end
+  igw[Internet Gateway]
 
-  github[GitHub Actions CI/CD] -->|Terraform Deploy| alb
-  github -->|Terraform Deploy| rds
-  github -->|Terraform Deploy| asg
+  subnet1[Public Subnet AZ1]
+  subnet2[Public Subnet AZ2]
 
-  s3[S3 Backend] -->|Remote State| github
-  ddb[DynamoDB Lock Table] -->|State Locking| github
+  alb[Application Load Balancer]
 
-  acm[ACM Certificate] --> alb
-  iam[IAM Role] --> ec2a
+  ec2a[EC2 Instance AZ1]
+  ec2b[EC2 Instance AZ2]
+
+  rds[RDS - PostgreSQL]
+  dynamodb[DynamoDB Table]
+
+  app1[Static App]
+  app2[Static App]
+
+  github[GitHub Actions CI/CD]
+  s3[S3 Backend Bucket]
+  ddb[DynamoDB Lock Table]
+  acm[ACM Certificate]
+  iam[IAM Role]
+
+  igw --> subnet1
+  igw --> subnet2
+
+  subnet1 --> alb
+  subnet2 --> alb
+
+  alb --> ec2a
+  alb --> ec2b
+
+  ec2a --> app1
+  ec2b --> app2
+
+  ec2a --> rds
+  ec2b --> dynamodb
+
+  github --> alb
+  github --> rds
+  github --> ec2a
+  github --> ec2b
+
+  s3 --> github
+  ddb --> github
+
+  acm --> alb
+
+  iam --> ec2a
   iam --> ec2b
+
   ec2a --> s3
   ec2b --> s3
   ```
-## 🛠️ Database Layer
 
-### RDS (PostgreSQL)
+## Data Layer
 
-* Managed PostgreSQL 15.3 in private subnets
-* Connected to EC2 app tier
-* Output: `${terraform output rds_endpoint}`
+This project demonstrates both relational and NoSQL storage on AWS:
+
+### ✅ PostgreSQL (RDS)
+- Managed PostgreSQL 15.3 in private subnets
+- **Multi-AZ** enabled for high availability
+- **Secure** access via private subnets and security groups
+- Backups retained for 7 days
+- Connected to EC2 app tier
+- Terraform Reference:
+  ```hcl
+  resource "aws_db_instance" "main" {
+    engine         = "postgres"
+    multi_az       = true
+    ...
+  }
+  ```
 
 ### DynamoDB
 
 * Serverless, PAY\_PER\_REQUEST billing
-* Primary key: `user_id`
+* Primary key: Composite (`PK` + `SK`)
+* Includes TTL and a GSI for flexible access
 * Output: `${terraform output dynamodb_table_name}`
 
 ## IAM Role Configuration (EC2 + S3 Integration)
@@ -204,11 +237,13 @@ curl -H "X-aws-ec2-metadata-token: $TOKEN" \
 
 ## Terraform Outputs
 
-* ALB DNS
-* EC2 Public IP
-* RDS Endpoint
-* DynamoDB Table
-* VPC ID & Subnet ID
+```bash
+alb_dns_name = "capstone-alb-1234567890.us-east-1.elb.amazonaws.com"
+ec2_public_ip = "18.191.123.45"
+rds_endpoint = "capstone-db.abcdefg123.us-east-1.rds.amazonaws.com"
+dynamodb_table_name = "capstone-app-data"
+vpc_id = "vpc-0a1b2c3d4e5f6g7h"
+```
 
 ## Usage
 
@@ -233,9 +268,9 @@ Jason VanDeventer – [vanfreckle.com](https://vanfreckle.com)
 
 **What I Learned**
 
-* Modular IaC with Terraform
-* IAM and S3 access without credentials
-* Auto Scaling, ALB, and RDS best practices
-* IMDSv2 metadata and launch template intricacies
-* Debugging real AWS deployment failures
-* Production documentation standards for hiring visibility
+* How to modularize Terraform for production-ready IaC.
+* Securely access AWS services via IAM roles (no static credentials).
+* Configure EC2 Auto Scaling with ALB integration.
+* Use IMDSv2 and Launch Templates securely.
+* Troubleshoot and recover from real AWS deployment issues.
+* Create clear, concise documentation for hiring visibility.

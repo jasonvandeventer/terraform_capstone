@@ -157,6 +157,45 @@ graph TD
 
 This project demonstrates both relational and NoSQL storage on AWS:
 
+## 📊 Monitoring & Logging
+
+This project includes centralized logging and monitoring using AWS-native services to meet best practices for auditability and observability.
+
+### ✅ CloudTrail
+
+* **Multi-region trail** enabled
+* Tracks all management-level API activity across the account
+* Logs are delivered to an **S3 bucket** with:
+  - **Versioning enabled** for log recovery
+  - **Server-side encryption (SSE-S3)** for secure storage
+  - **Bucket ownership enforcement** (ACLs disabled)
+* Terraform enforces required permissions using `aws_s3_bucket_policy`
+* Example log path:  
+  `s3://jv-capstone-cloudtrail-logs/AWSLogs/<account_id>/CloudTrail/...`
+
+### ✅ CloudWatch (Planned)
+
+* EC2 metrics available in CloudWatch (CPU, network, etc.)
+* Alarms and dashboards to be implemented in Day 14+
+* Log streaming via CloudWatch Agent (optional enhancement)
+
+### 🔐 Security
+
+* **S3 encryption** is enforced via `server_side_encryption_configuration`
+* ACLs are disabled using **bucket ownership controls**
+* Supports future upgrade to **SSE-KMS encryption** with custom keys
+
+### Terraform Reference:
+
+```hcl
+resource "aws_cloudtrail" "main" {
+  name                          = "capstone-trail"
+  s3_bucket_name                = aws_s3_bucket.cloudtrail_logs.id
+  is_multi_region_trail         = true
+  enable_log_file_validation    = true
+  ...
+}
+
 ### ✅ PostgreSQL (RDS)
 - Managed PostgreSQL 15.3 in private subnets
 - **Multi-AZ** enabled for high availability

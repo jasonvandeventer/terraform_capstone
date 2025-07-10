@@ -43,3 +43,13 @@ output "rds_db_name" {
 output "dynamodb_table_name" {
   value = aws_dynamodb_table.users.name
 }
+
+output "cloudtrail_kms_key_arn" {
+  description = "ARN of the KMS key used for CloudTrail encryption"
+  value       = aws_kms_key.cloudtrail.arn
+}
+
+output "cloudtrail_kms_key_id" {
+  description = "Key ID of the KMS key used for CloudTrail encryption"
+  value       = aws_kms_key.cloudtrail.key_id
+}

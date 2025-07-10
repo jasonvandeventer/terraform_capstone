@@ -20,7 +20,8 @@ resource "aws_kms_key" "cloudtrail" {
           "kms:DescribeKey",
           "kms:GetKeyPolicy",
           "kms:PutKeyPolicy",
-          "kms:ListResourceTags"
+          "kms:ListResourceTags",
+          "kms:GetKeyRotationStatus"
         ],
         Resource : "*"
       },

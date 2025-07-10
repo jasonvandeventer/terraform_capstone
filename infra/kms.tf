@@ -17,7 +17,8 @@ resource "aws_kms_key" "cloudtrail" {
           "kms:Encrypt",
           "kms:Decrypt",
           "kms:GenerateDataKey*",
-          "kms:DescribeKey"
+          "kms:DescribeKey",
+          "kms:GetKeyPolicy"
         ],
         Resource : "*"
       },

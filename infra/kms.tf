@@ -24,7 +24,7 @@ resource "aws_kms_key" "cloudtrail" {
           "kms:GetKeyRotationStatus",
           "kms:ListAliases"
         ],
-        "Resource": "*"
+        "Resource" : "*"
       },
       {
         Sid : "Allow account admins full access",

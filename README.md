@@ -173,11 +173,11 @@ This project includes centralized logging and monitoring using AWS-native servic
 * Example log path:  
   `s3://jv-capstone-cloudtrail-logs/AWSLogs/<account_id>/CloudTrail/...`
 
-### ✅ CloudWatch (Planned)
+### 📊 Monitoring & Alerts
 
-* EC2 metrics available in CloudWatch (CPU, network, etc.)
-* Alarms and dashboards to be implemented in Day 14+
-* Log streaming via CloudWatch Agent (optional enhancement)
+- ✅ CloudWatch Alarm for Auto Scaling Group instance count
+- ✅ SNS topic for alert delivery (email notifications enabled)
+- ✅ Terraform-managed log group for application logs (`/aws/capstone/app`)
 
 ### 🔐 Security
 

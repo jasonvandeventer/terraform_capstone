@@ -15,9 +15,9 @@ This project demonstrates my ability to provision secure, scalable AWS infrastru
 
 ## ✅ Live Demo
 
-🌐 **Production Deployment**: [`https://aws.vanfreckle.com`](https://aws.vanfreckle.com)
+🌐 **Production Deployment**: [`https://capstone.vanfreckle.com`](https://capstone.vanfreckle.com)
 
-![Working Screenshot](./screenshots/aws-vanfreckle-live.png)
+![Working Screenshot](./screenshots/capstone-vanfreckle-live.png)
 
 The deployed site serves a static HTML app from an Nginx container on EC2, behind an Application Load Balancer with TLS enabled.
 

@@ -5,7 +5,8 @@
 ![CI/CD](https://img.shields.io/badge/CI/CD-GitHub_Actions-2088FF?logo=githubactions)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 [![GitHub repo](https://img.shields.io/badge/Repo-jasonvandeventer%2Fterraform_capstone-181717?logo=github)](https://github.com/jasonvandeventer/terraform_capstone)
-[![Live Site](https://img.shields.io/website?url=https%3A%2F%2Fcapstone.vanfreckle.com)](https://capstone.vanfreckle.com)
+[![Live Site](https://img.shields.io/website?url=http%3A%2F%2Fcapstone.vanfreckle.com)](http://capstone.vanfreckle.com)
+![Mode: Low-Cost Enabled](https://img.shields.io/badge/Mode-Low--Cost-green?style=flat-square&logo=amazonaws)
 
 **Terraform-powered infrastructure with automated CI/CD and containerized deployment**
 
@@ -15,7 +16,7 @@ This project demonstrates my ability to provision secure, scalable AWS infrastru
 
 ## ✅ Live Demo
 
-🌐 **Production Deployment**: [`https://capstone.vanfreckle.com`](https://capstone.vanfreckle.com)
+🌐 **Production Deployment**: [`http://capstone.vanfreckle.com`](https://capstone.vanfreckle.com)
 
 ![Working Screenshot](./screenshots/capstone-vanfreckle-live.png)
 
@@ -38,6 +39,54 @@ terraform init && terraform apply
 
 
 ---
+
+## 💸 Low-Cost Mode Support
+
+To minimize AWS costs while keeping the project live for demos and portfolio review, this Terraform setup includes a `low_cost` mode toggle.
+
+### 🎯 Purpose
+- Runs a single EC2 instance instead of Auto Scaling groups
+- Disables RDS, ALB, ACM, and CloudTrail to avoid recurring charges
+- Keeps DNS, static hosting, IAM, and core infrastructure intact
+- Ideal for portfolio, GitHub Pages integration, or job interviews
+
+### 🧪 Modes
+
+| Mode             | Description                                                                 |
+|------------------|-----------------------------------------------------------------------------|
+| `low_cost = true` *(default)* | ✅ Minimal AWS usage, Free Tier eligible — best for demos and recruiters |
+| `low_cost = false`            | 💪 Full infrastructure: ALB, ASG, RDS, ACM, CloudTrail           |
+
+### 🛠️ Usage
+
+In `terraform.tfvars`:
+```hcl
+low_cost = true
+```
+
+> 💡 This cost comparison demonstrates my ability to balance architecture with operational costs — a crucial DevOps skill for production and demo environments alike.
+
+### 💵 Monthly Cost Savings
+
+By toggling the `low_cost` flag, this project avoids unnecessary AWS charges while preserving the demo experience. Here's a breakdown of approximate monthly costs:
+
+| AWS Resource                  | Full Mode (Est.) | Low-Cost Mode | Notes |
+|------------------------------|------------------|----------------|-------|
+| EC2 (2× t3.micro in ASG)     | ~$9.50           | ~$4.75         | Reduced to 1 instance |
+| Application Load Balancer    | ~$18.00          | $0             | Removed entirely |
+| RDS PostgreSQL (Multi-AZ)    | ~$32.00          | $0             | Disabled |
+| CloudTrail + S3 Logging      | ~$5.00           | $0             | Disabled |
+| CloudWatch Logs + Metrics    | ~$5.00           | ~$0.50         | Retention reduced |
+| ACM Certificate              | $0.00            | $0.00          | Free (but removed in demo mode) |
+| Data Transfer (ALB, RDS, etc.) | ~$5.00+        | ~$1.00         | Minimized |
+
+**Estimated Total Monthly Cost:**
+
+| Mode            | Cost (Est.) |
+|------------------|--------------|
+| Full Infrastructure | **$65–75/month** |
+| Low-Cost Mode       | **$5–7/month**   |
+
 
 ## Capabilities Demonstrated
 

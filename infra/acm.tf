@@ -1,5 +1,6 @@
 # Request a public certificate via ACM (manual DNS validation)
 resource "aws_acm_certificate" "main" {
+  count             = var.low_cost ? 0 : 1
   domain_name       = var.domain_name
   validation_method = "DNS"
 
@@ -14,9 +15,12 @@ resource "aws_acm_certificate" "main" {
 
 # Finalizes validation once DNS CNAME record is manually added (Cloudflare, etc.)
 resource "aws_acm_certificate_validation" "main" {
-  certificate_arn = aws_acm_certificate.main.arn
+  count           = var.low_cost ? 0 : 1
+  certificate_arn = aws_acm_certificate.main[0].arn
 
   validation_record_fqdns = [
-    for dvo in aws_acm_certificate.main.domain_validation_options : dvo.resource_record_name
+    for dvo in aws_acm_certificate.main[0].domain_validation_options :
+    dvo.resource_record_name
   ]
 }
+

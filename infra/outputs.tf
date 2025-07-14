@@ -22,26 +22,29 @@ output "security_group_id" {
 
 # ALB and Certificate Outputs
 output "alb_dns_name" {
+  value       = var.low_cost ? null : aws_lb.main[0].dns_name
   description = "DNS name of the ALB"
-  value       = aws_lb.main.dns_name
 }
 
 output "cert_validation_details" {
-  description = "ACM certificate validation DNS details"
-  value       = aws_acm_certificate.main.domain_validation_options
+  value       = var.low_cost ? [] : aws_acm_certificate.main[0].domain_validation_options
+  description = "ACM DNS records to validate domain"
 }
 
+
 output "rds_endpoint" {
-  value = aws_db_instance.main.endpoint
+  value       = var.low_cost ? null : aws_db_instance.main[0].endpoint
+  description = "RDS Endpoint"
 }
 
 output "rds_db_name" {
-  description = "Database name for app configuration"
-  value       = aws_db_instance.main.db_name
+  value       = var.low_cost ? null : aws_db_instance.main[0].db_name
+  description = "The name of the RDS database"
 }
 
 output "dynamodb_table_name" {
-  value = aws_dynamodb_table.users.name
+  value       = try(aws_dynamodb_table.users.name, null)
+  description = "Name of the DynamoDB table"
 }
 
 output "cloudtrail_kms_key_arn" {
@@ -52,4 +55,14 @@ output "cloudtrail_kms_key_arn" {
 output "cloudtrail_kms_key_id" {
   description = "Key ID of the KMS key used for CloudTrail encryption"
   value       = aws_kms_key.cloudtrail.key_id
+}
+
+output "low_cost_mode" {
+  value       = var.low_cost
+  description = "Indicates whether low-cost mode is active"
+}
+
+output "web_instance_public_ip" {
+  value       = var.low_cost ? aws_instance.web[0].public_ip : null
+  description = "Public IP of standalone EC2 instance (low-cost mode)"
 }

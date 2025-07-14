@@ -1,13 +1,15 @@
 resource "aws_launch_template" "web" {
+  count         = var.low_cost ? 0 : 1
   name_prefix   = "capstone-lt-"
   image_id      = var.ami_id
   instance_type = var.instance_type
+
   iam_instance_profile {
     name = aws_iam_instance_profile.ec2_s3_profile.name
   }
-  depends_on = [aws_iam_instance_profile.ec2_s3_profile]
 
-  key_name = var.key_name
+  depends_on = [aws_iam_instance_profile.ec2_s3_profile]
+  key_name   = var.key_name
 
   metadata_options {
     http_endpoint               = "enabled"
@@ -52,6 +54,7 @@ EOF
 }
 
 resource "aws_autoscaling_group" "web_asg" {
+  count            = var.low_cost ? 0 : 1
   name             = "capstone-asg"
   max_size         = 2
   min_size         = 1
@@ -65,10 +68,10 @@ resource "aws_autoscaling_group" "web_asg" {
   health_check_type         = "ELB"
   health_check_grace_period = 300
 
-  target_group_arns = [aws_lb_target_group.web.arn]
+  target_group_arns = var.low_cost ? [] : [aws_lb_target_group.web[0].arn]
 
   launch_template {
-    id      = aws_launch_template.web.id
+    id      = aws_launch_template.web[0].id
     version = "$Latest"
   }
 

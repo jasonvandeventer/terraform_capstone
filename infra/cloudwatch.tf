@@ -8,23 +8,17 @@ resource "aws_cloudwatch_log_group" "app" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "asg_unhealthy_instances" {
-  alarm_name          = "asg-unhealthy-instances"
+  count               = var.low_cost ? 0 : 1
+  alarm_name          = "UnhealthyInstancesAlarm"
   comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = 2
-  metric_name         = "GroupTotalInstances"
+  evaluation_periods  = 1
+  metric_name         = "UnhealthyHostCount"
   namespace           = "AWS/AutoScaling"
   period              = 60
   statistic           = "Average"
-  threshold           = 0
+  threshold           = 1
 
   dimensions = {
-    AutoScalingGroupName = aws_autoscaling_group.web_asg.name
-  }
-
-  alarm_description = "Triggers if the Auto Scaling Group has no healthy in-service instances"
-  alarm_actions     = [aws_sns_topic.alerts.arn]
-
-  tags = {
-    Name = "asg-unhealthy-alarm"
+    AutoScalingGroupName = aws_autoscaling_group.web_asg[0].name
   }
 }

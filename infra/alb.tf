@@ -1,5 +1,6 @@
 # Application Load Balancer
 resource "aws_lb" "main" {
+  count              = var.low_cost ? 0 : 1
   name               = "capstone-alb"
   internal           = false
   load_balancer_type = "application"
@@ -18,6 +19,7 @@ resource "aws_lb" "main" {
 
 # Target Group for EC2 instances
 resource "aws_lb_target_group" "web" {
+  count    = var.low_cost ? 0 : 1
   name     = "capstone-tg"
   port     = 80
   protocol = "HTTP"
@@ -37,9 +39,10 @@ resource "aws_lb_target_group" "web" {
   }
 }
 
-# HTTP Listener (for redirect or fallback)
+# HTTP Listener (for redirect to HTTPS)
 resource "aws_lb_listener" "http" {
-  load_balancer_arn = aws_lb.main.arn
+  count             = var.low_cost ? 0 : 1
+  load_balancer_arn = var.low_cost ? null : aws_lb.main[0].arn
   port              = 80
   protocol          = "HTTP"
 
@@ -54,16 +57,17 @@ resource "aws_lb_listener" "http" {
   }
 }
 
-# HTTPS Listener (TLS termination using ACM cert)
+# HTTPS Listener
 resource "aws_lb_listener" "https" {
-  load_balancer_arn = aws_lb.main.arn
+  count             = var.low_cost ? 0 : 1
+  load_balancer_arn = var.low_cost ? null : aws_lb.main[0].arn
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = aws_acm_certificate.main.arn
+  certificate_arn   = var.low_cost ? null : aws_acm_certificate.main[0].arn
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.web.arn
+    target_group_arn = var.low_cost ? null : aws_lb_target_group.web[0].arn
   }
 }

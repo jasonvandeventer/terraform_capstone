@@ -80,3 +80,15 @@ variable "db_instance_class" {
 locals {
   deploy_version = timestamp()
 }
+
+variable "low_cost" {
+  description = "Enable low-cost mode to minimize AWS charges"
+  type        = bool
+  default     = true
+}
+
+variable "alert_email" {
+  description = "Email address to receive SNS alerts"
+  type        = string
+  default     = "" # Optional: could be null if you want stricter enforcement
+}
